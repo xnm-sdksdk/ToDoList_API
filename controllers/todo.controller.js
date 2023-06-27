@@ -115,6 +115,25 @@ exports.createTodo = async (req, res, next) => {
 // Put To Do By Id
 exports.updateTodo = async (req, res, next) => {
   try {
+    const todoId = req.params.id;
+    const { title, description, completed, dueDate, priority, tags } = req.body;
+
+    const todo = await Todo.findByIdAndUpdate(todoId, { new: true });
+
+    if (!todo) {
+      return res.status(404).json({ message: "To Do not found." });
+    }
+
+    todo.title = title;
+    todo.description = description;
+    todo.completed = completed;
+    todo.dueDate = dueDate;
+    todo.priority = priority;
+    todo.tags = tags;
+
+    await todo.save();
+
+    res.status(200).json({ message: "To Do updated successfully", todo: todo });
   } catch (err) {
     res.status(500).json({
       message: err.message || "Something went wrong. Please try again later.",
