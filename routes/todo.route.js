@@ -6,7 +6,7 @@ router.route("/").get(todoController.getList);
 
 router.route("/:id").get(todoController.getTodoById);
 
-router.route('/search').get(todoController.getByPriority)
+router.route("/search").get(todoController.getByPriority);
 
 router.route("/").post(todoController.createTodo);
 
