@@ -36,16 +36,18 @@ exports.createTodo = async (req, res, next) => {
   try {
     const { title, description, completed, dueDate, priority, tags } = req.body;
 
+    console.log(title, description, completed, dueDate, priority, tags);
+    console.log(req.body);
     // Check for all fields
     if (
       !title ||
       !description ||
-      !completed ||
+      completed === undefined ||
       !dueDate ||
       !priority ||
       !tags
     ) {
-      return res.status(400).json({ message: "Title is required!" });
+      return res.status(400).json({ message: "All fields are required!" });
     }
 
     // Check for input type
@@ -56,7 +58,7 @@ exports.createTodo = async (req, res, next) => {
     }
 
     // Check for the priority input
-    const validPriority = ["Not important", "Important", "Very Important"];
+    const validPriority = ["Not Important", "Important", "Very Important"];
     if (!validPriority.includes(priority)) {
       return res.status(400).json({
         message: "Invalid priority.",
@@ -65,11 +67,13 @@ exports.createTodo = async (req, res, next) => {
 
     // Check for the Due Date
     let todoDate = new Date(dueDate);
-    if (todoDate < Date.now()) {
+    if (todoDate <= Date.now()) {
       return res.status(400).json({
         message: "Invalid date.",
       });
     }
+
+    const completedBool = Boolean(completed);
 
     // Check for existing todo
     const existTodo = await Todo.findOne({ title });
@@ -82,7 +86,7 @@ exports.createTodo = async (req, res, next) => {
     const todo = new Todo({
       title: title,
       description: description,
-      completed: completed,
+      completed: completedBool,
       dueDate: dueDate,
       priority: priority,
       tags: tags,

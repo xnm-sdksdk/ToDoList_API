@@ -24,7 +24,7 @@ module.exports = (mongoose) => {
     },
     priority: {
       type: String,
-      enum: ["Not important", "Important", "Very Important"],
+      enum: ["Not Important", "Important", "Very Important"],
       default: "Important",
       required: true,
     },
