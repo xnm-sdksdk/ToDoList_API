@@ -1,3 +1,6 @@
+const db = require("../models/index.model");
+const Todo = db.todos;
+
 // Get All To Dos
 exports.getList = async (req, res, next) => {
   try {
@@ -21,6 +24,73 @@ exports.getTodoById = async (req, res, next) => {
 // Post To Do
 exports.createTodo = async (req, res, next) => {
   try {
+    const { title, description, completed, dueDate, priority, tags } = req.body;
+
+    // Check for all fields
+    if (
+      !title ||
+      !description ||
+      !completed ||
+      !dueDate ||
+      !priority ||
+      !tags
+    ) {
+      return res.status(400).json({ message: "Title is required!" });
+    }
+
+    // Check for input type
+    if (typeof title !== "string" || typeof description !== "string") {
+      return res
+        .status(400)
+        .json({ message: "Insert fields must be a string." });
+    }
+
+    // Check for the priority input
+    const validPriority = ["Not important", "Important", "Very Important"];
+    if (!validPriority.includes(priority)) {
+      return res.status(400).json({
+        message: "Invalid priority.",
+      });
+    }
+
+    // Check for the Due Date
+    let todoDate = new Date(dueDate);
+    if (todoDate < Date.now()) {
+      return res.status(400).json({
+        message: "Invalid date.",
+      });
+    }
+
+    // Check for existing todo
+    const existTodo = await Todo.findOne({ title });
+    if (existTodo) {
+      return res.status(400).json({
+        message: "To Do with the given name already exists.",
+      });
+    }
+
+    const todo = new Todo({
+      title: title,
+      description: description,
+      completed: completed,
+      dueDate: dueDate,
+      priority: priority,
+      tags: tags,
+    });
+    await todo.save();
+
+    const response = {
+      title: todo.title,
+      description: todo.description,
+      completed: todo.completed,
+      dueDate: todo.dueDate,
+      priority: todo.priority,
+      tags: todo.tags,
+    };
+
+    res
+      .status(201)
+      .json({ message: "To Do created successfully!", todo: response });
   } catch (err) {
     res.status(500).json({
       message: err.message || "Something went wrong. Please try again later.",
