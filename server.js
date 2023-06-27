@@ -1,9 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 
 // Import the Routes
 const todoRoutes = require("./routes/todo.route");
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 app.get("/api/todo", (res) => {
   res.status(200).json({ message: "Welcome to the To Do List Rest API!" });
