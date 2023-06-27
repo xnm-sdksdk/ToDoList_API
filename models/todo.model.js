@@ -7,10 +7,12 @@ module.exports = (mongoose) => {
     description: {
       type: String,
       default: "",
+      required: true,
     },
     completed: {
       type: Boolean,
       default: false,
+      required: true,
     },
     created: {
       type: Date,
@@ -18,15 +20,18 @@ module.exports = (mongoose) => {
     },
     dueDate: {
       type: Date,
+      required: true,
     },
     priority: {
       type: String,
       enum: ["Not important", "Important", "Very Important"],
       default: "Important",
+      required: true,
     },
     tags: {
       type: [String],
       default: [],
+      required: true,
     },
   });
   const Todo = mongoose.model("Todo", schema);
