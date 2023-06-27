@@ -17,4 +17,4 @@ app.use("/api/todo/list", todoRoutes);
 
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || "127.0.0.1";
-app.listen(PORT, () => console.log(`http://${HOST}:${PORT}`));
+app.listen(PORT, () => console.log(`Server running: http://${HOST}:${PORT}`));
