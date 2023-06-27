@@ -165,3 +165,27 @@ exports.deleteTodo = async (req, res, next) => {
     });
   }
 };
+
+// Get By Priority
+exports.getByPriority = async (req, res, next) => {
+  try {
+    const { priority } = req.query;
+
+    if (!priority) {
+      return res.status(400).json({ message: "Priority is required!" });
+    }
+
+    const validPriority = ["Not Important", "Important", "Very Important"];
+    if (!validPriority.includes(priority)) {
+      return res.status(400).json({ message: "Invalid priority!" });
+    }
+
+    const toDo = await Todo.find({ priority: priority });
+
+    res.status(200).json(toDo);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Something went wrong. Please try again later.",
+    });
+  }
+};
