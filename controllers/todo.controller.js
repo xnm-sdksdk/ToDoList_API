@@ -124,6 +124,13 @@ exports.updateTodo = async (req, res, next) => {
       return res.status(404).json({ message: "To Do not found." });
     }
 
+    const existTodo = await Todo.findOne({ title });
+    if (existTodo) {
+      return res.status(400).json({
+        message: "To Do with the given name already exists.",
+      });
+    }
+
     todo.title = title;
     todo.description = description;
     todo.completed = completed;
