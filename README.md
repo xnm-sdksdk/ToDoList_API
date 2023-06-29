@@ -46,7 +46,3 @@ This is a RESTful API for managing a Todo List built with Express, Mongoose, and
 - Get a Todo By Id: Get
 - Update a Todo By Id: Put
 - Delete a Todo By Id: Delete
-
-## Todos
-
-### Create a Todo
